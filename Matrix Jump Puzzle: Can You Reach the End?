@@ -1,0 +1,42 @@
+from collections import deque
+
+def can_reach_end(matrix: list[list[int]]) -> bool:
+    if not matrix or not matrix[0]:
+        return False
+
+    rows, cols = len(matrix), len(matrix[0])
+    visited = set()
+    queue = deque([(0, 0)])
+
+    while queue:
+        i, j = queue.popleft()
+
+        if (i, j) == (rows - 1, cols - 1):
+            return True
+        
+        if (i, j) in visited:
+            continue
+
+        visited.add((i, j))
+        step = matrix[i][j]
+
+        # Move right
+        if j + step < cols:
+            queue.append((i, j + step))
+        
+        # Move down
+        if i + step < rows:
+            queue.append((i + step, j))
+
+    return False
+🧪 Example Run:
+python
+Copier
+Modifier
+matrix = [
+    [2, 3, 1],
+    [1, 2, 2],
+    [1, 1, 0]
+]
+
+print(can_reach_end(matrix))  # Output: True
