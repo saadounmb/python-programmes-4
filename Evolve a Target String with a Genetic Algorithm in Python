@@ -1,0 +1,61 @@
+import random
+import string
+
+TARGET = "hello world"
+POPULATION_SIZE = 100
+MUTATION_RATE = 0.01
+GENERATIONS = 1000
+
+# Generate a random string of the same length as the target
+def random_individual(length):
+    return ''.join(random.choice(string.printable[:95]) for _ in range(length))
+
+# Fitness: how many characters match the target
+def fitness(individual):
+    return sum(1 for i, c in enumerate(individual) if c == TARGET[i])
+
+# Select two parents using roulette wheel selection
+def select(population):
+    weights = [fitness(ind) for ind in population]
+    return random.choices(population, weights=weights, k=2)
+
+# Crossover: mix genes from two parents
+def crossover(parent1, parent2):
+    child = ''
+    for i in range(len(TARGET)):
+        child += random.choice([parent1[i], parent2[i]])
+    return child
+
+# Mutate: randomly change characters
+def mutate(individual):
+    new_individual = ''
+    for char in individual:
+        if random.random() < MUTATION_RATE:
+            new_individual += random.choice(string.printable[:95])
+        else:
+            new_individual += char
+    return new_individual
+
+# Main genetic algorithm loop
+def evolve():
+    population = [random_individual(len(TARGET)) for _ in range(POPULATION_SIZE)]
+
+    for generation in range(GENERATIONS):
+        population = sorted(population, key=lambda x: -fitness(x))
+        best = population[0]
+        print(f"Generation {generation}: {best} (Fitness: {fitness(best)})")
+
+        if best == TARGET:
+            print("🎉 Target reached!")
+            break
+
+        new_population = []
+        while len(new_population) < POPULATION_SIZE:
+            parent1, parent2 = select(population)
+            child = crossover(parent1, parent2)
+            child = mutate(child)
+            new_population.append(child)
+
+        population = new_population
+
+evolve()
