@@ -1,0 +1,51 @@
+def has_cycle(graph):
+    visited = set()
+    recursion_stack = set()
+
+    def dfs(node):
+        if node in recursion_stack:
+            return True  # Cycle detected!
+        if node in visited:
+            return False
+
+        visited.add(node)
+        recursion_stack.add(node)
+
+        for neighbor in graph.get(node, []):
+            if dfs(neighbor):
+                return True
+
+        recursion_stack.remove(node)
+        return False
+
+    for node in graph:
+        if dfs(node):
+            return True
+
+    return False
+🧪 Test it out:
+python
+Copier
+Modifier
+graph1 = {
+    'A': ['B'],
+    'B': ['C'],
+    'C': ['D'],
+    'D': []
+}
+print(has_cycle(graph1))  # False
+
+graph2 = {
+    'A': ['B'],
+    'B': ['C'],
+    'C': ['A']
+}
+print(has_cycle(graph2))  # True
+
+graph3 = {
+    1: [2],
+    2: [3, 4],
+    3: [1],
+    4: []
+}
+print(has_cycle(graph3))  # True
