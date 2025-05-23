@@ -1,0 +1,11 @@
+import itertools
+
+def dice_sum_combinations(target, dice=2):
+    """Returns all combinations of `dice` dice that sum to `target`."""
+    all_rolls = itertools.product(range(1, 7), repeat=dice)
+    valid_combinations = [roll for roll in all_rolls if sum(roll) == target]
+    return valid_combinations
+
+# Test examples
+print(dice_sum_combinations(7, 2))
+print(dice_sum_combinations(5, 3))
