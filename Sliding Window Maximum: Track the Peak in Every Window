@@ -1,0 +1,25 @@
+from collections import deque
+
+def sliding_window_max(nums, k):
+    if not nums or k == 0:
+        return []
+
+    result = []
+    dq = deque()  # stores indices
+
+    for i in range(len(nums)):
+        # Remove indices outside the current window
+        while dq and dq[0] < i - k + 1:
+            dq.popleft()
+
+        # Remove indices of smaller elements (they can't be max)
+        while dq and nums[dq[-1]] < nums[i]:
+            dq.pop()
+
+        dq.append(i)
+
+        # Start adding max values to result when the first window is complete
+        if i >= k - 1:
+            result.append(nums[dq[0]])
+
+    return result
